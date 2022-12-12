@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
  
 /* appearance */
-static const unsigned int borderpx       = 3;   /* border pixel of windows */
+static const unsigned int borderpx       = 1;   /* border pixel of windows */
 static const unsigned int snap           = 31;  /* snap pixel */
 static const unsigned int gappih         = 9;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 9;  /* vert inner gap between windows */
@@ -14,20 +14,19 @@ static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows sel
 static const unsigned int systrayonleft  = 1;   /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 1;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False display systray on other*/
-static const int showsystray             = 1;   /* 0 means no systray */
+static const int showsystray             = 0;   /* 0 means no systray */
 
 //static const char *fonts[]        = { "monofur:size=15:antialias=true:autohint=true", "Noto sans CJK JP:size=16:antialias=true:autohint" };
-static const char *fonts[]          = { "Fantasque Sans Mono:size=14:antialias=true:autohint=true", "Noto sans CJK JP:size=15:antialias=true:autohint" };
+static const char *fonts[]          = { "Fantasque Sans Mono:size=13:antialias=true:autohint=true", "Noto sans CJK JP:size=15:antialias=true:autohint", "mononoki NF:size=19:antialias=true:autohint"  };
 static const char dmenufont[]       =  "Comic sans:size=69";
-
 /* Tag names and lenght*/
-//static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14" };
-static const char *tags[] = { "夢", "歌", "世", "梨", "曜", "羽", "花", "宝", "海", "愛", "樹", "林", "森", "🔥" };
+static const char *tags[] = { "夢", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "🔥" };
+//static const char *tags[] = { "夢", "歌", "世", "梨", "曜", "羽", "花", "宝", "海", "愛", "恋", "🔥" };
 static const Rule rules[] = {
 
         /* class          instance    title           tags mask  isfloating  isterminal  noswallow  monitor */
         { "Gimp",          NULL,      NULL,           0,          0,          0,           0,        -1 },
-        { "firefox",       NULL,      NULL,           1 << 2,     0,          0,          -1,        -1 },
+//      { "firefox",       NULL,      NULL,           1 << 2,     0,          0,          -1,        -1 },
         { "discord",       NULL,      NULL,           1 << 10,    0,          0,          -1,        -1 },
         { "Dwarf_Fortress",NULL,      NULL,           1 << 9,     0,          0,          -1,        -1 },
         { "st",            NULL,      NULL,           0,          0,          1,           0,        -1 },
@@ -48,7 +47,7 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
    /* symbol     arrange function */
-   { "",       tile },    /* first entry is default */
+   { "",         tile },    /* first entry is default */
    { "[M]",      monocle },
    { "|M|",      centeredmaster },
    { "[@]",      spiral },
@@ -94,30 +93,42 @@ static Key keys[] = {
 { MODKEY,                       XK_d,          spawn,          {.v = dmenucmd } },
 { MODKEY|ShiftMask,             XK_d,          spawn,          {.v = (const char *[]){"/home/lu/.local/bin/sha"} } }, 
 { MODKEY|ShiftMask,             XK_Return,     spawn,          {.v = (const char *[]){"alacritty", NULL} } },
+{ MODKEY|Mod1Mask,              XK_1,          spawn,          {.v = (const char *[]){"firefox", NULL} } },
+{ MODKEY|Mod1Mask,              XK_2,          spawn,          {.v = (const char *[]){"chromium", NULL} } },
 { MODKEY,                       XK_t,          spawn,          {.v = (const char *[]){"st", NULL} } },
 { MODKEY|ShiftMask,             XK_e,          spawn,          {.v = (const char *[]){"/home/lu/.local/bin/emacsclient.sh" } } },
-{ MODKEY,         	        XK_b,          spawn,          {.v = (const char *[]){"/home/lu/.local/bin/btc"} } },
+{ MODKEY,         		        XK_b,          spawn,          {.v = (const char *[]){"/home/lu/.local/bin/btc"} } },
 { MODKEY|ShiftMask,             XK_v,          spawn,          {.v = (const char *[]){"swm", NULL } } },
+{ MODKEY,                       XK_n,          spawn,          SHCMD("xclip -o -se c >> /tmp/clip")  },  
+{ MODKEY|ShiftMask,             XK_n,          spawn,          SHCMD("cat /tmp/clip | dmenu -c -l 5 | xclip -se c")  },  
 { MODKEY,                       XK_v,          spawn,          SHCMD("compiledwm && pkill dwm && dwm ; exec xsrdwm") },
-{ MODKEY,                       XK_adiaeresis, spawn,          SHCMD("killall xsrdwm ; exec xsrdwm") },
-{ MODKEY,                       XK_apostrophe, spawn,          {.v = (const char *[]){"compiledwm", NULL } } },
-{ MODKEY,      		        XK_F1,         spawn,          {.v = (const char *[]){"/home/lu/.local/bin/redshift_inc.sh" } } },
-{ MODKEY,      		        XK_End,        spawn,          {.v = (const char *[]){"/home/lu/.local/bin/rngwall" } } },
-{ MODKEY,      		        XK_Next,       spawn,          {.v = (const char *[]){"/home/lu/.local/bin/selwall" } } },
-{ MODKEY,      		        XK_m,          spawn,          {.v = (const char *[]){"/home/lu/.local/bin/dmbook"  } } },
+{ MODKEY,                       XK_aring,      spawn,          SHCMD("killall python; killall xsrdwm; exec pyxsrdwm") },
+{ MODKEY|ShiftMask,             XK_adiaeresis, spawn,          SHCMD("killall xsrdwm; killall python") },
+{ MODKEY,                       XK_adiaeresis, spawn,          SHCMD("killall python; killall xsrdwm; exec xsrdwm") },
+//{ MODKEY,                     XK_apostrophe, spawn,          {.v = (const char *[]){"compiledwm", NULL } } },
+{ MODKEY,      		           XK_F1,         spawn,          {.v = (const char *[]){"/home/lu/.local/bin/redshift_inc.sh" } } },
+{ MODKEY,      		           XK_End,        spawn,          {.v = (const char *[]){"/home/lu/.local/bin/rngwall" } } },
+{ MODKEY,      		           XK_Next,       spawn,          {.v = (const char *[]){"/home/lu/.local/bin/selwall" } } },
+{ MODKEY,      		           XK_Home,       spawn,          {.v = (const char *[]){"/home/lu/.local/bin/twal" } } },
+{ MODKEY,      		           XK_m,          spawn,          {.v = (const char *[]){"/home/lu/.local/bin/dmbook"  } } },
 { MODKEY,                       XK_c,          spawn,          SHCMD("pkill picom || picom") },
-{ MODKEY,      	     	        XK_Insert,     spawn,          SHCMD("pactl set-sink-mute $(pactl info | awk '/Default Sink/ {print $3}') toggle") },
-{ MODKEY,      	     	        XK_e,          spawn,          SHCMD("pactl set-sink-volume '@DEFAULT_SINK@' +1000 ; killall xsrdwm ; exec xsrdwm") },
-{ MODKEY,         		XK_w,          spawn,          SHCMD("pactl set-sink-volume '@DEFAULT_SINK@' -1000 ; killall xsrdwm ; exec xsrdwm") },
+{ MODKEY,      	     	        XK_Insert,     spawn,          SHCMD("pactl set-sink-mute $(pactl info | awk '/Default Sink/ {print $3}') toggle ; refresh-xsrdwm") },
+{ MODKEY,      	     	        XK_e,          spawn,          SHCMD("pactl set-sink-volume '@DEFAULT_SINK@' +500 ; refresh-xsrdwm") },
+{ MODKEY,         		        XK_w,          spawn,          SHCMD("pactl set-sink-volume '@DEFAULT_SINK@' -500 ; refresh-xsrdwm") },
 { MODKEY,                       XK_F3,         spawn,          SHCMD("notify-send Volume: $(pamixer --get-volume-human)") },
 { MODKEY,      	    	        XK_F2,         spawn,          {.v = (const char *[]){"/home/lu/.local/bin/pactl_sink" } } },
-{ MODKEY,         	  	XK_r,          spawn,          SHCMD("st -e pulsemixer") },
+{ MODKEY,         	  	        XK_r,          spawn,          SHCMD("st -e pulsemixer") },
 { MODKEY,      	    	        XK_F4,         spawn,          SHCMD("xrandr --output DP-1 --mode 1920x1080") },
+{ MODKEY,      	    	        XK_F5,         spawn,          SHCMD("xrandr --output DVI-D-0 --mode 1920x1080 --right-of HDMI-0") },
+{ MODKEY|ShiftMask,             XK_F5,         spawn,          SHCMD("xrandr --output DVI-D-0 --off") },
 { MODKEY,                       XK_q,          spawn,          SHCMD("dmkill") },
 { NULL,                         XK_Print,      spawn,          SHCMD("maim -m 10 -s -u | tee /home/lu/.trash/$(date +%s).webp | xclip -se c -t image/png") },
 { MODKEY,                       XK_Print,      spawn,          SHCMD("maim -m 10 -u /home/lu/.trash/$(date +%s).webp") },
+{ MODKEY,                       XK_Scroll_Lock,spawn,          SHCMD("zenity --filename=/home/lu/.trash/ --file-selection") },
 { MODKEY,                       XK_y,          spawn,          SHCMD("mpv $(xclip -o)") },
-{ MODKEY|ShiftMask,	        XK_p,          togglebar,      {0} },
+{ MODKEY,         		        XK_Pause,      spawn,          {.v = (const char *[]){"/home/lu/.local/bin/./dmpower"} } },
+{ MODKEY|ShiftMask,             XK_s,          spawn,          {.v = (const char *[]){"/home/lu/.local/bin/./dmsearch"} } },
+{ MODKEY|ShiftMask,	           XK_p,          togglebar,      {0} },
 { MODKEY|ControlMask,           XK_Down,       moveresize,     {.v = "0x 25y 0w 0h" } },
 { MODKEY|ControlMask,           XK_Up,         moveresize,     {.v = "0x -25y 0w 0h" } },
 { MODKEY|ControlMask,           XK_Right,      moveresize,     {.v = "25x 0y 0w 0h" } },
@@ -128,20 +139,30 @@ static Key keys[] = {
 { MODKEY|ControlMask|ShiftMask, XK_Left,       moveresize,     {.v = "0x 0y -25w 0h" } },
 { MODKEY,                       XK_Up,         focusstack,     {.i = -1 } },	
 { MODKEY,                       XK_Down,       focusstack,     {.i = +1 } },
-{ MODKEY|ShiftMask,             XK_o,          incnmaster,     {.i = +1 } },
-{ MODKEY,                       XK_o,          incnmaster,     {.i = +1 } },
-{ MODKEY|ShiftMask,             XK_l,          incnmaster,     {.i = -1 } },
-{ MODKEY,                       XK_l,          incnmaster,     {.i = -1 } },
-{ MODKEY,                       XK_odiaeresis, resetnmaster,   {0} },
-{ MODKEY|ShiftMask,             XK_odiaeresis, resetnmaster,   {0} },
+{ MODKEY,                       XK_k,          focusstack,     {.i = -1 } },	
+{ MODKEY,                       XK_j,          focusstack,     {.i = +1 } },
+{ MODKEY|ShiftMask,             XK_period,     incnmaster,     {.i = +1 } },
+{ MODKEY,                       XK_period,     incnmaster,     {.i = +1 } },
+{ MODKEY|ShiftMask,             XK_comma,      incnmaster,     {.i = -1 } },
+{ MODKEY,                       XK_comma,      incnmaster,     {.i = -1 } },
+{ MODKEY,                       XK_minus,      resetnmaster,   {0} },
+{ MODKEY|ShiftMask,             XK_minus,      resetnmaster,   {0} },
 { MODKEY,                       XK_Left,       movestack,      {.i = +1 } },
 { MODKEY,                       XK_Right,      movestack,      {.i = -1 } },
-{ MODKEY,                       XK_j,          aspectresize,   {.i = +24} },
-{ MODKEY, 	                XK_k,          aspectresize,   {.i = -24} },
+{ MODKEY,                       XK_h,          movestack,      {.i = +1 } },
+{ MODKEY,                       XK_l,          movestack,      {.i = -1 } },
+{ MODKEY|ControlMask|ShiftMask, XK_Prior,      aspectresize,   {.i = +24} },
+{ MODKEY|ControlMask|ShiftMask, XK_Next,       aspectresize,   {.i = -24} },
+{ MODKEY|ShiftMask,             XK_h,          setmfact,       {.f = -0.05} },
+{ MODKEY|ShiftMask,             XK_l,          setmfact,       {.f = +0.05} },
+{ MODKEY|ShiftMask,             XK_k,          setcfact,       {.f = +0.25} },
+{ MODKEY|ShiftMask,             XK_j,          setcfact,       {.f = -0.25} },
+
 { MODKEY|ShiftMask,             XK_Left,       setmfact,       {.f = -0.05} },
 { MODKEY|ShiftMask,             XK_Right,      setmfact,       {.f = +0.05} },
 { MODKEY|ShiftMask,             XK_Up,         setcfact,       {.f = +0.25} },
 { MODKEY|ShiftMask,             XK_Down,       setcfact,       {.f = -0.25} },
+
 { MODKEY|ShiftMask,             XK_o,          setcfact,       {.f =  0.00} },
 { MODKEY,                       XK_Return,     zoom,           {0} },
 { MODKEY|Mod1Mask,              XK_u,          incrgaps,       {.i = +1 } },
@@ -201,7 +222,7 @@ TAGKEYS(                        XK_7,                          7)
 TAGKEYS(                        XK_8,                          8)
 TAGKEYS(                        XK_9,                          9)
 TAGKEYS(                        XK_0,                         10)
-TAGKEYS(                        XK_Escape,                    13)
+TAGKEYS(                        XK_Escape,                    11)
 //{ MODKEY|ShiftMask,           XK_r,          quit,          {0} },
 };
 
